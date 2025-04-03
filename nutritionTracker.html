@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Tracker</title>
+    <style>
+        /* CSS from style.css */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2, h3, h4 {
+            color: #333;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: calc(100% - 22px); /* Adjust for padding/border */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1em; /* Ensure button text is readable */
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        button[type="button"] {
+            background-color: #f0ad4e;
+        }
+        button[type="button"]:hover {
+            background-color: #ec971f;
+        }
+
+        /* Specific styling for small delete buttons */
+        button.delete-btn {
+            margin-left: 10px;
+            background-color: #d9534f;
+            padding: 2px 5px;
+            font-size: 0.8em; /* Make 'X' smaller */
+            line-height: 1; /* Adjust line height for small buttons */
+            vertical-align: middle; /* Align better with text */
+        }
+         button.delete-btn:hover {
+            background-color: #c9302c;
+         }
+
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #e9e9e9;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            display: flex; /* Use flexbox for better alignment */
+            justify-content: space-between; /* Push delete button to the right */
+            align-items: center; /* Vertically align text and button */
+        }
+
+        li span { /* For potential future use inside li */
+            font-weight: bold;
+            color: #555;
+        }
+
+        #meal-ingredients-inputs div {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        #meal-ingredients-inputs select {
+             width: 55%; /* Adjusted width */
+             margin-bottom: 0;
+        }
+        #meal-ingredients-inputs input[type="number"] {
+             width: 25%; /* Adjusted width */
+             margin-bottom: 0;
+        }
+         #meal-ingredients-inputs button { /* Style remove button in meal form */
+             width: auto; /* Let button size itself */
+             padding: 5px 8px;
+             font-size: 0.9em;
+             margin-top: 0; /* Remove top margin */
+             background-color: #d9534f;
+        }
+         #meal-ingredients-inputs button:hover {
+             background-color: #c9302c;
+         }
+
+
+        #daily-summary {
+            margin-top: 20px;
+            background-color: #eef;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        #daily-totals {
+            font-weight: bold;
+            color: #337ab7;
+        }
+    </style>
+</head>
+<body>
+    <h1>Daily Nutrition Tracker</h1>
+
+    <div class="container">
+        <!-- Section: Manage Ingredients -->
+        <section id="ingredients-section">
+            <h2>Manage Ingredients</h2>
+            <form id="ingredient-form">
+                <h3>Add New Ingredient</h3>
+                <label for="ingredient-name">Name:</label>
+                <input type="text" id="ingredient-name" required>
+
+                <label for="serving-weight">Serving Weight (g):</label>
+                <input type="number" id="serving-weight" step="any" min="0.1" required>
+
+                <label for="calories">Calories (per serving):</label>
+                <input type="number" id="calories" step="any" min="0" required>
+
+                <label for="carbs">Carbs (g per serving):</label>
+                <input type="number" id="carbs" step="any" min="0" required>
+
+                <label for="protein">Protein (g per serving):</label>
+                <input type="number" id="protein" step="any" min="0" required>
+
+                <label for="fat">Fat (g per serving):</label>
+                <input type="number" id="fat" step="any" min="0" required>
+
+                <button type="submit">Add Ingredient</button>
+            </form>
+            <div id="ingredient-list-container">
+                <h3>Available Ingredients</h3>
+                <ul id="ingredient-list">
+                    <!-- Ingredients will be listed here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section: Create Meals -->
+        <section id="meals-section">
+            <h2>Create Reusable Meals</h2>
+            <form id="meal-form">
+                <h3>Create New Meal</h3>
+                <label for="meal-name">Meal Name:</label>
+                <input type="text" id="meal-name" required>
+
+                <h4>Ingredients in Meal:</h4>
+                <div id="meal-ingredients-inputs">
+                    <!-- Ingredient inputs will be added here -->
+                </div>
+                <button type="button" id="add-ingredient-to-meal-btn">Add Ingredient Row</button>
+                <br><br>
+                <button type="submit">Create Meal</button>
+            </form>
+             <div id="meal-list-container">
+                <h3>Saved Meals</h3>
+                <ul id="meal-list">
+                    <!-- Meals will be listed here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section: Daily Log -->
+        <section id="log-section">
+            <h2>Daily Log</h2>
+            <label for="log-date">Select Date:</label>
+            <input type="date" id="log-date">
+
+            <form id="log-entry-form">
+                <h3>Add Entry to Log</h3>
+                <label for="log-item-select">Select Meal or Ingredient:</label>
+                <select id="log-item-select" required>
+                    <option value="">-- Select --</option>
+                    <!-- Options populated by JS -->
+                </select>
+
+                <label for="log-weight">Weight Consumed (g):</label>
+                <input type="number" id="log-weight" step="any" min="0.1" required>
+
+                <button type="submit">Add to Log</button>
+            </form>
+
+            <div id="daily-summary">
+                <h3>Log for <span id="selected-log-date"></span></h3>
+                <ul id="daily-log-list">
+                    <!-- Log entries for the selected date -->
+                </ul>
+                <h4>Daily Totals:</h4>
+                <p id="daily-totals">
+                    Calories: 0 | Carbs: 0g | Protein: 0g | Fat: 0g
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // JavaScript from script.js
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA STORAGE ---
+            let ingredients = JSON.parse(localStorage.getItem('nutritionIngredients')) || {};
+            let meals = JSON.parse(localStorage.getItem('nutritionMeals')) || {};
+            let dailyLog = JSON.parse(localStorage.getItem('nutritionDailyLog')) || {}; // { 'YYYY-MM-DD': [entry1, entry2] }
+
+            // --- DOM ELEMENTS ---
+            const ingredientForm = document.getElementById('ingredient-form');
+            const ingredientList = document.getElementById('ingredient-list');
+            const mealForm = document.getElementById('meal-form');
+            const mealIngredientsInputs = document.getElementById('meal-ingredients-inputs');
+            const addIngredientToMealBtn = document.getElementById('add-ingredient-to-meal-btn');
+            const mealList = document.getElementById('meal-list');
+            const logDateInput = document.getElementById('log-date');
+            const logEntryForm = document.getElementById('log-entry-form');
+            const logItemSelect = document.getElementById('log-item-select');
+            const dailyLogList = document.getElementById('daily-log-list');
+            const dailyTotalsP = document.getElementById('daily-totals');
+            const selectedLogDateSpan = document.getElementById('selected-log-date');
+
+            // --- FUNCTIONS ---
+
+            const saveData = () => {
+                localStorage.setItem('nutritionIngredients', JSON.stringify(ingredients));
+                localStorage.setItem('nutritionMeals', JSON.stringify(meals));
+                localStorage.setItem('nutritionDailyLog', JSON.stringify(dailyLog));
+            };
+
+            // --- Ingredient Functions ---
+            const renderIngredientList = () => {
+                ingredientList.innerHTML = '';
+                const sortedIngredientIds = Object.keys(ingredients).sort((a, b) => ingredients[a].name.localeCompare(ingredients[b].name));
+
+                sortedIngredientIds.forEach(id => {
+                    const item = ingredients[id];
+                    const li = document.createElement('li');
+
+                    const textSpan = document.createElement('span'); // Wrap text content
+                    textSpan.textContent = `${item.name} (Serving: ${item.servingWeight}g | Cal: ${item.calories.toFixed(1)}, C: ${item.carbs.toFixed(1)}g, P: ${item.protein.toFixed(1)}g, F: ${item.fat.toFixed(1)}g)`;
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'X';
+                    deleteBtn.classList.add('delete-btn'); // Use class for styling
+                    deleteBtn.title = `Delete ${item.name}`; // Tooltip
+                    deleteBtn.onclick = (e) => {
+                         e.stopPropagation(); // Prevent potential event bubbling if li gets click listeners later
+                         deleteIngredient(id);
+                    }
+
+                    li.appendChild(textSpan);
+                    li.appendChild(deleteBtn);
+                    ingredientList.appendChild(li);
+                });
+
+                populateIngredientSelects(); // Update dropdowns whenever ingredients change
+                populateLogItemSelect(); // Update log dropdown
+            };
+
+             const deleteIngredient = (id) => {
+                 if (!ingredients[id]) return; // Avoid errors if already deleted
+
+                 // Check if ingredient is used in any meals
+                 let usedInMeals = [];
+                 for (const mealId in meals) {
+                     if (meals[mealId].ingredients.some(ing => ing.ingredientId === id)) {
+                         usedInMeals.push(meals[mealId].name);
+                     }
+                 }
+
+                 let confirmMsg = `Are you sure you want to delete ${ingredients[id].name}?`;
+                 if (usedInMeals.length > 0) {
+                     confirmMsg += `\n\nWarning: This ingredient is used in the following meals:\n- ${usedInMeals.join('\n- ')}\n\nDeleting it will break these meals and potentially affect past log entries.`;
+                 }
+
+
+                if (confirm(confirmMsg)) {
+                    // Remove ingredient
+                    delete ingredients[id];
+
+                    // Optional: Decide how to handle meals using the deleted ingredient.
+                    // Option 1: Delete affected meals (simplest, but destructive)
+                    // Option 2: Mark meals as invalid (requires UI changes)
+                    // Option 3: Keep meals but log entries might show "[Deleted Item]" (current behavior)
+                    // For now, we just delete the ingredient and let dependent items break gracefully.
+
+                    saveData();
+                    renderIngredientList(); // Re-render ingredient list
+                    renderMealList(); // Re-render meal list as affected meals might be implicitly removed or broken
+                    // Re-render current log in case a deleted ingredient was logged directly
+                    renderDailyLog(logDateInput.value);
+                }
+            };
+
+            const handleAddIngredient = (e) => {
+                e.preventDefault();
+                const name = document.getElementById('ingredient-name').value.trim();
+                const servingWeight = parseFloat(document.getElementById('serving-weight').value);
+                const calories = parseFloat(document.getElementById('calories').value);
+                const carbs = parseFloat(document.getElementById('carbs').value);
+                const protein = parseFloat(document.getElementById('protein').value);
+                const fat = parseFloat(document.getElementById('fat').value);
+
+                if (!name || isNaN(servingWeight) || servingWeight <= 0 || isNaN(calories) || calories < 0 || isNaN(carbs) || carbs < 0 || isNaN(protein) || protein < 0 || isNaN(fat) || fat < 0 ) {
+                    alert('Please fill all fields correctly. Name is required, weights and nutritional values must be numbers >= 0 (serving weight > 0).');
+                    return;
+                }
+
+                 // Check for duplicate ingredient name (case-insensitive)
+                const existingIngredient = Object.values(ingredients).find(ing => ing.name.toLowerCase() === name.toLowerCase());
+                if (existingIngredient) {
+                    alert(`An ingredient named "${name}" already exists. Please use a different name.`);
+                    return;
+                }
+
+                const id = 'ing_' + Date.now(); // Simple unique ID
+                ingredients[id] = {
+                    id,
+                    name,
+                    servingWeight,
+                    calories,
+                    carbs,
+                    protein,
+                    fat,
+                    // Calculate nutrition per gram for easier use later
+                    nutritionPerGram: {
+                        calories: calories / servingWeight,
+                        carbs: carbs / servingWeight,
+                        protein: protein / servingWeight,
+                        fat: fat / servingWeight,
+                    }
+                };
+                saveData();
+                renderIngredientList();
+                ingredientForm.reset();
+            };
+
+            // Populates ingredient <select> elements in the meal creation form
+             const populateIngredientSelects = () => {
+                const selects = mealIngredientsInputs.querySelectorAll('select');
+                selects.forEach(select => {
+                    const currentVal = select.value; // Preserve selection if possible
+                    select.innerHTML = '<option value="">-- Select Ingredient --</option>'; // Clear existing options
+
+                    // Get ingredients sorted by name
+                    const sortedIngredientIds = Object.keys(ingredients).sort((a, b) => ingredients[a].name.localeCompare(ingredients[b].name));
+
+                    sortedIngredientIds.forEach(id => {
+                        const option = document.createElement('option');
+                        option.value = id;
+                        option.textContent = ingredients[id].name;
+                        select.appendChild(option);
+                    });
+
+                    // Try to restore previous selection if it still exists
+                    if (ingredients[currentVal]) {
+                       select.value = currentVal;
+                    }
+                });
+            };
+
+
+             const addIngredientRowToMealForm = () => {
+                const div = document.createElement('div');
+                const select = document.createElement('select');
+                select.required = true;
+                const weightInput = document.createElement('input');
+                weightInput.type = 'number';
+                weightInput.placeholder = 'Weight (g)';
+                weightInput.step = 'any';
+                weightInput.min = '0.1';
+                weightInput.required = true;
+
+                // Populate the select initially
+                select.innerHTML = '<option value="">-- Select Ingredient --</option>';
+                 // Get ingredients sorted by name
+                 const sortedIngredientIds = Object.keys(ingredients).sort((a, b) => ingredients[a].name.localeCompare(ingredients[b].name));
+
+                 sortedIngredientIds.forEach(id => {
+                     const option = document.createElement('option');
+                     option.value = id;
+                     option.textContent = ingredients[id].name;
+                     select.appendChild(option);
+                 });
+
+                // Remove button for this row
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'Remove';
+                removeBtn.type = 'button'; // Important: prevent form submission
+                removeBtn.title = 'Remove this ingredient row';
+                removeBtn.onclick = () => div.remove(); // Arrow function for simplicity
+
+                div.appendChild(select);
+                div.appendChild(weightInput);
+                div.appendChild(removeBtn);
+                mealIngredientsInputs.appendChild(div);
+            };
+
+
+            // --- Meal Functions ---
+             const renderMealList = () => {
+                mealList.innerHTML = '';
+                const sortedMealIds = Object.keys(meals).sort((a, b) => meals[a].name.localeCompare(meals[b].name));
+
+                sortedMealIds.forEach(id => {
+                    const meal = meals[id];
+                    const li = document.createElement('li');
+
+                    const textSpan = document.createElement('span'); // Wrap text content
+                    // Check if meal calculation might be invalid (e.g., ingredient deleted)
+                     const totalWeight = meal.totalWeight || 0;
+                     const cals = meal.totalNutrition?.calories ?? 0;
+                     const carbs = meal.totalNutrition?.carbs ?? 0;
+                     const prot = meal.totalNutrition?.protein ?? 0;
+                     const fat = meal.totalNutrition?.fat ?? 0;
+
+                    textSpan.textContent = `${meal.name} (${totalWeight.toFixed(1)}g | Cal: ${cals.toFixed(1)}, C: ${carbs.toFixed(1)}g, P: ${prot.toFixed(1)}g, F: ${fat.toFixed(1)}g)`;
+                    if (!meal.totalNutrition || totalWeight <= 0) { // Indicate potentially broken meal
+                         textSpan.style.fontStyle = 'italic';
+                         textSpan.style.color = 'grey';
+                         textSpan.textContent += " [Invalid Data?]";
+                    }
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'X';
+                    deleteBtn.classList.add('delete-btn');
+                    deleteBtn.title = `Delete meal: ${meal.name}`;
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        deleteMeal(id);
+                    }
+
+                    li.appendChild(textSpan);
+                    li.appendChild(deleteBtn);
+                    mealList.appendChild(li);
+                });
+                populateLogItemSelect(); // Update log dropdown
+            };
+
+              const deleteMeal = (id) => {
+                if (!meals[id]) return;
+                if (confirm(`Are you sure you want to delete the meal: ${meals[id].name}? \nThis won't delete past log entries, but they might show as '[Deleted Item]' if logged.`)) {
+                    delete meals[id];
+                    saveData();
+                    renderMealList(); // Re-render meal list
+                     // Re-render current log in case a deleted meal was logged
+                    renderDailyLog(logDateInput.value);
+                }
+            };
+
+            const handleCreateMeal = (e) => {
+                e.preventDefault();
+                const mealName = document.getElementById('meal-name').value.trim();
+                if (!mealName) {
+                    alert('Please enter a meal name.');
+                    return;
+                }
+
+                 // Check for duplicate meal name (case-insensitive)
+                const existingMeal = Object.values(meals).find(m => m.name.toLowerCase() === mealName.toLowerCase());
+                if (existingMeal) {
+                    alert(`A meal named "${mealName}" already exists. Please use a different name.`);
+                    return;
+                }
+
+
+                const ingredientRows = mealIngredientsInputs.querySelectorAll('div');
+                if (ingredientRows.length === 0) {
+                    alert('Please add at least one ingredient to the meal.');
+                    return;
+                }
+
+                let mealIngredientsData = []; // Renamed to avoid conflict
+                let totalNutrition = { calories: 0, carbs: 0, protein: 0, fat: 0 };
+                let totalWeight = 0;
+                let valid = true;
+                let uniqueIngredientIds = new Set(); // Track ingredient IDs added
+
+
+                ingredientRows.forEach(row => {
+                    const select = row.querySelector('select');
+                    const weightInput = row.querySelector('input[type="number"]');
+                    const ingredientId = select.value;
+                    const weight = parseFloat(weightInput.value);
+
+                    // Basic validation for the row
+                    if (!ingredientId || isNaN(weight) || weight <= 0) {
+                        // Don't alert for every empty/invalid row, just skip them unless none are valid
+                        // valid = false; // We'll check later if *any* valid rows exist
+                        return; // Skip this row
+                    }
+
+                    // Check if ingredient exists (it should, but defensively check)
+                    const ingredient = ingredients[ingredientId];
+                    if (!ingredient || !ingredient.nutritionPerGram) {
+                        console.error(`Ingredient with ID ${ingredientId} not found or missing nutrition data!`);
+                        alert(`Error: Ingredient "${select.options[select.selectedIndex]?.text || ingredientId}" seems invalid or was deleted. Please remove or fix it.`);
+                        valid = false;
+                        return; // Stop processing this row
+                    }
+
+                     // Check for duplicate ingredients within the same meal
+                     if (uniqueIngredientIds.has(ingredientId)) {
+                         alert(`Ingredient "${ingredient.name}" is added more than once. Please combine the weights into a single row for this ingredient.`);
+                         valid = false;
+                         return; // Stop processing this row
+                     }
+                     uniqueIngredientIds.add(ingredientId);
+
+
+                    // Add ingredient data and accumulate nutrition/weight
+                    mealIngredientsData.push({ ingredientId: ingredientId, weight: weight });
+                    totalWeight += weight;
+                    totalNutrition.calories += ingredient.nutritionPerGram.calories * weight;
+                    totalNutrition.carbs += ingredient.nutritionPerGram.carbs * weight;
+                    totalNutrition.protein += ingredient.nutritionPerGram.protein * weight;
+                    totalNutrition.fat += ingredient.nutritionPerGram.fat * weight;
+                });
+
+                // Final validation after processing all rows
+                if (!valid) {
+                    // An alert was likely already shown for the specific error
+                    return;
+                }
+                 if (mealIngredientsData.length === 0) {
+                     alert('No valid ingredient rows were found. Please add ingredients with valid weights.');
+                     return;
+                 }
+
+
+                const mealId = 'meal_' + Date.now();
+                meals[mealId] = {
+                    id: mealId,
+                    name: mealName,
+                    ingredients: mealIngredientsData, // Use the collected data
+                    totalNutrition: totalNutrition,
+                    totalWeight: totalWeight,
+                    // Store nutrition per gram of the *entire meal* for easy logging
+                    // Avoid division by zero if totalWeight is somehow 0
+                    nutritionPerGram: totalWeight > 0 ? {
+                         calories: totalNutrition.calories / totalWeight,
+                         carbs: totalNutrition.carbs / totalWeight,
+                         protein: totalNutrition.protein / totalWeight,
+                         fat: totalNutrition.fat / totalWeight,
+                    } : { calories: 0, carbs: 0, protein: 0, fat: 0 } // Default to zero if weight is zero
+                };
+
+                saveData();
+                renderMealList();
+                mealForm.reset(); // Reset name input
+                mealIngredientsInputs.innerHTML = ''; // Clear dynamic rows
+                 addIngredientRowToMealForm(); // Add one empty row back for the next meal
+            };
+
+
+            // --- Daily Log Functions ---
+            // Populates the single dropdown for adding items to the daily log
+            const populateLogItemSelect = () => {
+                const currentVal = logItemSelect.value; // Preserve selection if possible
+                logItemSelect.innerHTML = '<option value="">-- Select --</option>'; // Clear existing
+
+                // Add Ingredients Group (sorted)
+                const ingOptGroup = document.createElement('optgroup');
+                ingOptGroup.label = 'Ingredients';
+                 const sortedIngredientIds = Object.keys(ingredients).sort((a, b) => ingredients[a].name.localeCompare(ingredients[b].name));
+                 sortedIngredientIds.forEach(id => {
+                     const option = document.createElement('option');
+                     option.value = id; // Use ingredient ID
+                     option.textContent = ingredients[id].name;
+                     ingOptGroup.appendChild(option);
+                 });
+                if (sortedIngredientIds.length > 0) {
+                    logItemSelect.appendChild(ingOptGroup);
+                }
+
+
+                // Add Meals Group (sorted)
+                const mealOptGroup = document.createElement('optgroup');
+                mealOptGroup.label = 'Meals';
+                const sortedMealIds = Object.keys(meals).sort((a, b) => meals[a].name.localeCompare(meals[b].name));
+                 sortedMealIds.forEach(id => {
+                     // Only add meals that seem valid (have nutritionPerGram calculated)
+                    if (meals[id] && meals[id].nutritionPerGram) {
+                         const option = document.createElement('option');
+                         option.value = id; // Use meal ID
+                         option.textContent = meals[id].name;
+                         mealOptGroup.appendChild(option);
+                     }
+                 });
+                 if (sortedMealIds.length > 0 && mealOptGroup.childElementCount > 0) { // Only add group if it has valid meals
+                     logItemSelect.appendChild(mealOptGroup);
+                 }
+
+                 // Try to restore selection if the item still exists and is valid
+                const itemStillExists = (ingredients[currentVal] || (meals[currentVal] && meals[currentVal].nutritionPerGram));
+                 if (currentVal && itemStillExists) {
+                    logItemSelect.value = currentVal;
+                 } else if (logItemSelect.options.length > 1) {
+                     // If previous selection is gone, maybe default to the first actual item? Or keep "-- Select --"
+                     // logItemSelect.selectedIndex = 1; // Select first actual item
+                 }
+            };
+
+             const renderDailyLog = (dateString) => {
+                 selectedLogDateSpan.textContent = dateString ? new Date(dateString + 'T00:00:00').toLocaleDateString() : 'No date selected'; // Show formatted date
+                dailyLogList.innerHTML = ''; // Clear previous entries
+                let totals = { calories: 0, carbs: 0, protein: 0, fat: 0 };
+
+                const entriesForDate = dailyLog[dateString] || [];
+
+                // Sort entries by timestamp (optional, but nice)
+                entriesForDate.sort((a, b) => a.timestamp - b.timestamp);
+
+                entriesForDate.forEach((entry, index) => {
+                    const li = document.createElement('li');
+                    let itemName = "[Deleted Item]";
+                    let itemFound = false;
+
+                    // Try to find the item (meal or ingredient)
+                    if (entry.type === 'meal' && meals[entry.itemId]) {
+                         itemName = meals[entry.itemId].name;
+                         itemFound = true;
+                    } else if (entry.type === 'ingredient' && ingredients[entry.itemId]) {
+                         itemName = ingredients[entry.itemId].name;
+                         itemFound = true;
+                    }
+                    // Use the calculated nutrition stored AT THE TIME OF LOGGING
+                    // This prevents past logs from changing if an ingredient/meal is modified later
+                    const cals = entry.calculatedNutrition?.calories ?? 0;
+                    const carbs = entry.calculatedNutrition?.carbs ?? 0;
+                    const prot = entry.calculatedNutrition?.protein ?? 0;
+                    const fat = entry.calculatedNutrition?.fat ?? 0;
+
+
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = `${itemName} (${entry.weightConsumed}g) - Cal: ${cals.toFixed(1)}, C: ${carbs.toFixed(1)}g, P: ${prot.toFixed(1)}g, F: ${fat.toFixed(1)}g`;
+                    if (!itemFound) {
+                        textSpan.style.fontStyle = 'italic';
+                        textSpan.style.color = 'grey';
+                    }
+
+                    // Add entry's nutrition to totals
+                    totals.calories += cals;
+                    totals.carbs += carbs;
+                    totals.protein += prot;
+                    totals.fat += fat;
+
+
+                    // Add delete button for log entry
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'X';
+                    deleteBtn.classList.add('delete-btn');
+                    deleteBtn.title = `Remove this log entry`;
+                    // Pass the actual date string and the index *within that date's array*
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        deleteLogEntry(dateString, index, entry.timestamp); // Use timestamp for more robust deletion if needed
+                    }
+
+                    li.appendChild(textSpan);
+                    li.appendChild(deleteBtn);
+                    dailyLogList.appendChild(li);
+                });
+
+
+                // Update totals display
+                dailyTotalsP.textContent = `Calories: ${totals.calories.toFixed(1)} | Carbs: ${totals.carbs.toFixed(1)}g | Protein: ${totals.protein.toFixed(1)}g | Fat: ${totals.fat.toFixed(1)}g`;
+            };
+
+            // Adjusted to handle potential array shifts if multiple deletes happen without re-render
+            // Using timestamp matching is more robust if available, otherwise index is fallback
+              const deleteLogEntry = (dateString, index, timestamp) => {
+                 if (!dateString || !dailyLog[dateString]) return;
+
+                 let entryIndexToDelete = -1;
+
+                 // Prioritize finding by timestamp if provided
+                 if (timestamp) {
+                    entryIndexToDelete = dailyLog[dateString].findIndex(entry => entry.timestamp === timestamp);
+                 }
+
+                 // Fallback to index if timestamp wasn't provided or didn't match (shouldn't happen with current setup)
+                 if (entryIndexToDelete === -1 && index >= 0 && index < dailyLog[dateString].length) {
+                     console.warn("Deleting log entry by index as timestamp match failed or wasn't provided.");
+                     entryIndexToDelete = index;
+                 }
+
+
+                 if (entryIndexToDelete !== -1) {
+                     const entryToDelete = dailyLog[dateString][entryIndexToDelete];
+                      let itemName = "[Deleted Item]";
+                      if (entryToDelete.type === 'meal' && meals[entryToDelete.itemId]) itemName = meals[entryToDelete.itemId].name;
+                      else if (entryToDelete.type === 'ingredient' && ingredients[entryToDelete.itemId]) itemName = ingredients[entryToDelete.itemId].name;
+
+                     if (confirm(`Are you sure you want to remove this log entry for ${itemName}?`)) {
+                         dailyLog[dateString].splice(entryIndexToDelete, 1); // Remove item at the found index
+                         if (dailyLog[dateString].length === 0) {
+                             delete dailyLog[dateString]; // Clean up empty date entries in storage
+                         }
+                         saveData();
+                         renderDailyLog(dateString); // Re-render the log for the current date
+                     }
+                 } else {
+                    console.error("Could not find the log entry to delete.", {dateString, index, timestamp});
+                    alert("Error: Could not find the specific log entry to delete.");
+                 }
+             };
+
+
+            const handleAddLogEntry = (e) => {
+                e.preventDefault();
+                const dateString = logDateInput.value;
+                const selectedItemId = logItemSelect.value;
+                const weightConsumed = parseFloat(document.getElementById('log-weight').value);
+
+                if (!dateString) {
+                    alert('Please select a date for the log entry.');
+                    return;
+                }
+                 if (!selectedItemId) {
+                    alert('Please select a meal or ingredient to log.');
+                    return;
+                }
+                 if (isNaN(weightConsumed) || weightConsumed <= 0) {
+                    alert('Please enter a valid weight consumed (must be a positive number).');
+                    return;
+                }
+
+
+                let item;
+                let itemType;
+                let nutritionPerGram;
+
+                // Determine if it's a meal or ingredient and get its data
+                if (selectedItemId.startsWith('meal_')) {
+                    item = meals[selectedItemId];
+                    itemType = 'meal';
+                    if (item && item.nutritionPerGram) {
+                        nutritionPerGram = item.nutritionPerGram;
+                    }
+                } else if (selectedItemId.startsWith('ing_')) {
+                    item = ingredients[selectedItemId];
+                    itemType = 'ingredient';
+                     if (item && item.nutritionPerGram) {
+                        nutritionPerGram = item.nutritionPerGram;
+                    }
+                }
+
+                // Validate that we found the item and its nutrition data
+                if (!item || !nutritionPerGram) {
+                    alert('Selected item not found or has invalid data. It might have been deleted or corrupted after creation. Please check the meal/ingredient definition.');
+                    console.error("Error finding item or its nutritionPerGram for logging:", selectedItemId, item);
+                    return;
+                }
+                 // Extra check for non-finite numbers in nutritionPerGram (e.g., if weight was 0 during calculation)
+                if (!Object.values(nutritionPerGram).every(Number.isFinite)) {
+                    alert(`The selected item "${item.name}" has invalid calculated nutrition-per-gram (possibly due to zero weight during creation). Please recreate the item.`);
+                     console.error("Invalid nutritionPerGram data:", nutritionPerGram);
+                    return;
+                 }
+
+
+                // Calculate nutrition for the consumed amount
+                const calculatedNutrition = {
+                    calories: nutritionPerGram.calories * weightConsumed,
+                    carbs: nutritionPerGram.carbs * weightConsumed,
+                    protein: nutritionPerGram.protein * weightConsumed,
+                    fat: nutritionPerGram.fat * weightConsumed,
+                };
+
+                // Create the log entry object
+                const logEntry = {
+                    itemId: selectedItemId, // Store the ID of the meal/ingredient
+                    type: itemType,        // Store whether it was a 'meal' or 'ingredient'
+                    weightConsumed: weightConsumed, // Store the weight consumed
+                    calculatedNutrition: calculatedNutrition, // Store the calculated macros for this specific entry
+                    timestamp: Date.now() // Store timestamp for sorting or unique identification
+                };
+
+                // Initialize log array for the date if it doesn't exist
+                if (!dailyLog[dateString]) {
+                    dailyLog[dateString] = [];
+                }
+
+                // Add the new entry to the log for that date
+                dailyLog[dateString].push(logEntry);
+                saveData(); // Persist changes to localStorage
+                renderDailyLog(dateString); // Update display for the current date
+
+                // Reset only the necessary parts of the form for potentially faster subsequent entries
+                // logEntryForm.reset(); // This clears date, item, and weight
+                logItemSelect.value = ""; // Clear item selection
+                document.getElementById('log-weight').value = ""; // Clear weight
+                logItemSelect.focus(); // Set focus back to item select
+                // Keep date selected: logDateInput.value = dateString;
+            };
+
+            // Handler for when the date input value changes
+            const handleDateChange = () => {
+                 const selectedDate = logDateInput.value;
+                 if (selectedDate) {
+                    renderDailyLog(selectedDate);
+                 } else {
+                     // Handle case where date is cleared (if browser allows)
+                     selectedLogDateSpan.textContent = 'No date selected';
+                     dailyLogList.innerHTML = '';
+                     dailyTotalsP.textContent = 'Calories: 0 | Carbs: 0g | Protein: 0g | Fat: 0g';
+                 }
+            };
+
+            // --- INITIALIZATION ---
+            const initApp = () => {
+                // Set log date to today initially
+                const today = new Date().toISOString().split('T')[0];
+                logDateInput.value = today;
+
+                // Render initial lists (which also populate dropdowns)
+                renderIngredientList();
+                renderMealList();
+
+                // Add the first empty ingredient row to the meal form
+                if (mealIngredientsInputs.childElementCount === 0) { // Avoid adding if page was reloaded with rows present
+                    addIngredientRowToMealForm();
+                }
+
+                // Render today's log initially
+                renderDailyLog(today);
+
+                // --- Add Event Listeners ---
+                ingredientForm.addEventListener('submit', handleAddIngredient);
+                addIngredientToMealBtn.addEventListener('click', addIngredientRowToMealForm);
+                 mealForm.addEventListener('submit', handleCreateMeal);
+                logEntryForm.addEventListener('submit', handleAddLogEntry);
+                logDateInput.addEventListener('change', handleDateChange);
+
+                 // Add input event listener as well for browsers that support it for date changes
+                logDateInput.addEventListener('input', handleDateChange);
+            };
+
+            // Run the app initialization when the DOM is fully loaded
+            initApp();
+        });
+    </script>
+
+</body>
+</html>
