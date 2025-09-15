@@ -142,12 +142,394 @@
             font-weight: bold;
             color: #337ab7;
         }
+
+        /* Overview Section Styles */
+        #overview-section {
+            grid-column: 1 / -1; /* Span full width */
+        }
+
+        #overview-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .view-toggle-btn {
+            padding: 10px 20px;
+            border: 2px solid #337ab7;
+            background-color: white;
+            color: #337ab7;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .view-toggle-btn:hover {
+            background-color: #337ab7;
+            color: white;
+        }
+
+        .view-toggle-btn.active {
+            background-color: #337ab7;
+            color: white;
+        }
+
+        #overview-content {
+            text-align: center;
+        }
+
+        #overview-date-info {
+            margin-bottom: 30px;
+        }
+
+        #overview-period-title {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        #overview-period-subtitle {
+            margin: 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        #macro-circles-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .macro-circle-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 140px;
+        }
+
+        .circle-container {
+            margin-bottom: 15px;
+        }
+
+        .progress-circle {
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+
+        .progress-circle:hover {
+            transform: scale(1.05);
+        }
+
+        .progress-bar {
+            stroke-dasharray: 314; /* 2 * π * r = 2 * π * 50 ≈ 314 */
+            stroke-dashoffset: 314;
+            transition: stroke-dashoffset 1s ease-in-out;
+        }
+
+        .progress-percentage {
+            font-size: 18px;
+            font-weight: bold;
+            fill: #333;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            font-weight: 600;
+            fill: #666;
+        }
+
+        .macro-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .macro-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .macro-target {
+            font-size: 12px;
+            color: #666;
+        }
+
+        #balance-score-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+        }
+
+        .balance-circle {
+            position: relative;
+        }
+
+        .balance-progress-circle {
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+
+        .balance-progress-circle:hover {
+            transform: scale(1.02);
+        }
+
+        .balance-bar {
+            stroke-dasharray: 502; /* 2 * π * r = 2 * π * 80 ≈ 502 */
+            stroke-dashoffset: 502;
+            transition: stroke-dashoffset 1.5s ease-in-out;
+        }
+
+        .balance-score {
+            font-size: 36px;
+            font-weight: bold;
+            fill: #333;
+        }
+
+        .balance-label {
+            font-size: 16px;
+            font-weight: 600;
+            fill: #666;
+        }
+
+        #balance-description {
+            max-width: 300px;
+            text-align: left;
+        }
+
+        #balance-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        #balance-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .balance-factor {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            border-left: 4px solid #9C27B0;
+        }
+
+        .factor-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .factor-score {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #macro-circles-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            #balance-score-container {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            #balance-description {
+                text-align: center;
+            }
+
+            .view-toggle-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+
+        /* Animation classes */
+        .animate-in {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 <body>
     <h1>Daily Nutrition Tracker</h1>
 
     <div class="container">
+        <!-- Section: Nutrition Overview -->
+        <section id="overview-section">
+            <h2>Nutrition Overview</h2>
+            <div id="overview-controls">
+                <button type="button" id="daily-view-btn" class="view-toggle-btn active">Daily View</button>
+                <button type="button" id="weekly-view-btn" class="view-toggle-btn">Weekly Average</button>
+            </div>
+
+            <div id="overview-content">
+                <div id="overview-date-info">
+                    <h3 id="overview-period-title">Today's Balance</h3>
+                    <p id="overview-period-subtitle">September 15, 2025</p>
+                </div>
+
+                <div id="macro-circles-container">
+                    <div class="macro-circle-item">
+                        <div class="circle-container">
+                            <svg class="progress-circle" width="120" height="120">
+                                <circle class="progress-bg" cx="60" cy="60" r="50" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+                                <circle class="progress-bar" id="carbs-progress" cx="60" cy="60" r="50" fill="none" stroke="#4CAF50" stroke-width="8" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                                <text x="60" y="55" text-anchor="middle" class="progress-percentage" id="carbs-percentage">0%</text>
+                                <text x="60" y="75" text-anchor="middle" class="progress-label">Carbs</text>
+                            </svg>
+                        </div>
+                        <div class="macro-details">
+                            <span class="macro-amount" id="carbs-amount">0g</span>
+                            <span class="macro-target" id="carbs-target">/ 0g target</span>
+                        </div>
+                    </div>
+
+                    <div class="macro-circle-item">
+                        <div class="circle-container">
+                            <svg class="progress-circle" width="120" height="120">
+                                <circle class="progress-bg" cx="60" cy="60" r="50" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+                                <circle class="progress-bar" id="protein-progress" cx="60" cy="60" r="50" fill="none" stroke="#2196F3" stroke-width="8" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                                <text x="60" y="55" text-anchor="middle" class="progress-percentage" id="protein-percentage">0%</text>
+                                <text x="60" y="75" text-anchor="middle" class="progress-label">Protein</text>
+                            </svg>
+                        </div>
+                        <div class="macro-details">
+                            <span class="macro-amount" id="protein-amount">0g</span>
+                            <span class="macro-target" id="protein-target">/ 0g target</span>
+                        </div>
+                    </div>
+
+                    <div class="macro-circle-item">
+                        <div class="circle-container">
+                            <svg class="progress-circle" width="120" height="120">
+                                <circle class="progress-bg" cx="60" cy="60" r="50" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+                                <circle class="progress-bar" id="fat-progress" cx="60" cy="60" r="50" fill="none" stroke="#FF9800" stroke-width="8" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                                <text x="60" y="55" text-anchor="middle" class="progress-percentage" id="fat-percentage">0%</text>
+                                <text x="60" y="75" text-anchor="middle" class="progress-label">Fat</text>
+                            </svg>
+                        </div>
+                        <div class="macro-details">
+                            <span class="macro-amount" id="fat-amount">0g</span>
+                            <span class="macro-target" id="fat-target">/ 0g target</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="balance-score-container">
+                    <div class="balance-circle">
+                        <svg class="balance-progress-circle" width="200" height="200">
+                            <circle class="balance-bg" cx="100" cy="100" r="80" fill="none" stroke="#e0e0e0" stroke-width="12"/>
+                            <circle class="balance-bar" id="balance-progress" cx="100" cy="100" r="80" fill="none" stroke="#9C27B0" stroke-width="12" stroke-linecap="round" transform="rotate(-90 100 100)"/>
+                            <text x="100" y="95" text-anchor="middle" class="balance-score" id="balance-score">0</text>
+                            <text x="100" y="115" text-anchor="middle" class="balance-label">Balance Score</text>
+                        </svg>
+                    </div>
+                    <div id="balance-description">
+                        <p id="balance-text">Track your meals to see your nutrition balance!</p>
+                        <div id="balance-breakdown">
+                            <div class="balance-factor">
+                                <span class="factor-label">Macro Ratio:</span>
+                                <span class="factor-score" id="ratio-score">-</span>
+                            </div>
+                            <div class="balance-factor">
+                                <span class="factor-label">Target Achievement:</span>
+                                <span class="factor-score" id="target-score">-</span>
+                            </div>
+                            <div class="balance-factor">
+                                <span class="factor-label">Variety Score:</span>
+                                <span class="factor-score" id="variety-score">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Daily Log -->
+        <section id="log-section">
+            <h2>Daily Log</h2>
+            <label for="log-date">Select Date:</label>
+            <input type="date" id="log-date">
+
+            <form id="log-entry-form">
+                <h3>Add Entry to Log</h3>
+                <label for="log-item-select">Select Meal or Ingredient:</label>
+                <select id="log-item-select" required>
+                    <option value="">-- Select --</option>
+                    <!-- Options populated by JS -->
+                </select>
+
+                <label for="log-weight">Weight Consumed (g):</label>
+                <input type="number" id="log-weight" step="any" min="0.1" required>
+
+                <button type="submit">Add to Log</button>
+            </form>
+
+            <div id="daily-summary">
+                <h3>Log for <span id="selected-log-date"></span></h3>
+                <ul id="daily-log-list">
+                    <!-- Log entries for the selected date -->
+                </ul>
+                <h4>Daily Totals:</h4>
+                <p id="daily-totals">
+                    Calories: 0 | Carbs: 0g | Protein: 0g | Fat: 0g
+                </p>
+            </div>
+        </section>
+
         <!-- Section: Manage Ingredients -->
         <section id="ingredients-section">
             <h2>Manage Ingredients</h2>
@@ -202,38 +584,6 @@
                 <ul id="meal-list">
                     <!-- Meals will be listed here -->
                 </ul>
-            </div>
-        </section>
-
-        <!-- Section: Daily Log -->
-        <section id="log-section">
-            <h2>Daily Log</h2>
-            <label for="log-date">Select Date:</label>
-            <input type="date" id="log-date">
-
-            <form id="log-entry-form">
-                <h3>Add Entry to Log</h3>
-                <label for="log-item-select">Select Meal or Ingredient:</label>
-                <select id="log-item-select" required>
-                    <option value="">-- Select --</option>
-                    <!-- Options populated by JS -->
-                </select>
-
-                <label for="log-weight">Weight Consumed (g):</label>
-                <input type="number" id="log-weight" step="any" min="0.1" required>
-
-                <button type="submit">Add to Log</button>
-            </form>
-
-            <div id="daily-summary">
-                <h3>Log for <span id="selected-log-date"></span></h3>
-                <ul id="daily-log-list">
-                    <!-- Log entries for the selected date -->
-                </ul>
-                <h4>Daily Totals:</h4>
-                <p id="daily-totals">
-                    Calories: 0 | Carbs: 0g | Protein: 0g | Fat: 0g
-                </p>
             </div>
         </section>
     </div>
@@ -740,6 +1090,7 @@
                          }
                          saveData();
                          renderDailyLog(dateString); // Re-render the log for the current date
+                         updateOverview(); // Update the overview when entries are deleted
                      }
                  } else {
                     console.error("Could not find the log entry to delete.", {dateString, index, timestamp});
@@ -827,6 +1178,7 @@
                 dailyLog[dateString].push(logEntry);
                 saveData(); // Persist changes to localStorage
                 renderDailyLog(dateString); // Update display for the current date
+                updateOverview(); // Update the overview when new entries are added
 
                 // Reset only the necessary parts of the form for potentially faster subsequent entries
                 // logEntryForm.reset(); // This clears date, item, and weight
@@ -841,12 +1193,235 @@
                  const selectedDate = logDateInput.value;
                  if (selectedDate) {
                     renderDailyLog(selectedDate);
+                    updateOverview(); // Update overview when date changes
                  } else {
                      // Handle case where date is cleared (if browser allows)
                      selectedLogDateSpan.textContent = 'No date selected';
                      dailyLogList.innerHTML = '';
                      dailyTotalsP.textContent = 'Calories: 0 | Carbs: 0g | Protein: 0g | Fat: 0g';
+                     updateOverview();
                  }
+            };
+
+            // --- OVERVIEW FUNCTIONS ---
+            
+            // Calculate recommended daily values based on general guidelines
+            const getRecommendedDailyValues = () => {
+                // These are general recommendations - in a real app, you'd want user-specific targets
+                return {
+                    calories: 2000, // Standard 2000 calorie diet
+                    carbs: 250,     // 45-65% of calories (50% * 2000 / 4 = 250g)
+                    protein: 150,   // 10-35% of calories (30% * 2000 / 4 = 150g)
+                    fat: 67         // 20-35% of calories (30% * 2000 / 9 = 67g)
+                };
+            };
+
+            // Get nutrition totals for a specific date
+            const getDailyNutritionTotals = (dateString) => {
+                const dayLog = dailyLog[dateString] || [];
+                return dayLog.reduce((totals, entry) => {
+                    totals.calories += entry.calculatedNutrition?.calories || 0;
+                    totals.carbs += entry.calculatedNutrition?.carbs || 0;
+                    totals.protein += entry.calculatedNutrition?.protein || 0;
+                    totals.fat += entry.calculatedNutrition?.fat || 0;
+                    return totals;
+                }, { calories: 0, carbs: 0, protein: 0, fat: 0 });
+            };
+
+            // Get weekly average nutrition totals
+            const getWeeklyAverageNutrition = (endDate) => {
+                const end = new Date(endDate);
+                const totals = { calories: 0, carbs: 0, protein: 0, fat: 0 };
+                let daysWithData = 0;
+
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(end);
+                    date.setDate(date.getDate() - i);
+                    const dateString = date.toISOString().split('T')[0];
+                    
+                    if (dailyLog[dateString] && dailyLog[dateString].length > 0) {
+                        const dayTotals = getDailyNutritionTotals(dateString);
+                        totals.calories += dayTotals.calories;
+                        totals.carbs += dayTotals.carbs;
+                        totals.protein += dayTotals.protein;
+                        totals.fat += dayTotals.fat;
+                        daysWithData++;
+                    }
+                }
+
+                // Calculate averages
+                if (daysWithData > 0) {
+                    return {
+                        calories: totals.calories / daysWithData,
+                        carbs: totals.carbs / daysWithData,
+                        protein: totals.protein / daysWithData,
+                        fat: totals.fat / daysWithData,
+                        daysWithData
+                    };
+                }
+
+                return { calories: 0, carbs: 0, protein: 0, fat: 0, daysWithData: 0 };
+            };
+
+            // Calculate diet balance score (0-100)
+            const calculateBalanceScore = (actual, targets) => {
+                // Macro ratio score (how balanced the macros are)
+                const totalMacros = actual.carbs + actual.protein + actual.fat;
+                const macroRatioScore = totalMacros > 0 ? 
+                    Math.max(0, 100 - Math.abs(
+                        ((actual.carbs / totalMacros) - 0.5) * 100 +
+                        ((actual.protein / totalMacros) - 0.3) * 100 +
+                        ((actual.fat / totalMacros) - 0.2) * 100
+                    )) : 0;
+
+                // Target achievement score
+                const carbsAchievement = Math.min(100, (actual.carbs / targets.carbs) * 100);
+                const proteinAchievement = Math.min(100, (actual.protein / targets.protein) * 100);
+                const fatAchievement = Math.min(100, (actual.fat / targets.fat) * 100);
+                const targetScore = (carbsAchievement + proteinAchievement + fatAchievement) / 3;
+
+                // Variety score (based on number of different foods logged)
+                const currentDate = document.getElementById('daily-view-btn').classList.contains('active') 
+                    ? logDateInput.value 
+                    : logDateInput.value;
+                const dayLog = dailyLog[currentDate] || [];
+                const uniqueItems = new Set(dayLog.map(entry => entry.itemId));
+                const varietyScore = Math.min(100, (uniqueItems.size / 5) * 100); // 5+ items = 100%
+
+                // Weighted overall score
+                const overallScore = (macroRatioScore * 0.4) + (targetScore * 0.4) + (varietyScore * 0.2);
+
+                return {
+                    overall: Math.round(overallScore),
+                    macroRatio: Math.round(macroRatioScore),
+                    targetAchievement: Math.round(targetScore),
+                    variety: Math.round(varietyScore)
+                };
+            };
+
+            // Update circular progress bar
+            const updateCircularProgress = (elementId, percentage) => {
+                const circle = document.getElementById(elementId);
+                const circumference = 2 * Math.PI * 50; // radius = 50
+                const offset = circumference - (percentage / 100) * circumference;
+                circle.style.strokeDashoffset = offset;
+            };
+
+            // Update balance circle
+            const updateBalanceCircle = (score) => {
+                const circle = document.getElementById('balance-progress');
+                const circumference = 2 * Math.PI * 80; // radius = 80
+                const offset = circumference - (score / 100) * circumference;
+                circle.style.strokeDashoffset = offset;
+                
+                // Update color based on score
+                let color = '#f44336'; // Red for low scores
+                if (score >= 70) color = '#4CAF50'; // Green for good scores
+                else if (score >= 40) color = '#FF9800'; // Orange for medium scores
+                
+                circle.style.stroke = color;
+                document.getElementById('balance-score').textContent = score;
+            };
+
+            // Main overview update function
+            const updateOverview = () => {
+                const isDailyView = document.getElementById('daily-view-btn').classList.contains('active');
+                const currentDate = logDateInput.value;
+                const targets = getRecommendedDailyValues();
+
+                let nutritionData;
+                let periodTitle, periodSubtitle;
+
+                if (isDailyView) {
+                    nutritionData = getDailyNutritionTotals(currentDate);
+                    const date = new Date(currentDate);
+                    periodTitle = date.toDateString() === new Date().toDateString() ? "Today's Balance" : "Daily Balance";
+                    periodSubtitle = date.toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                } else {
+                    const weeklyData = getWeeklyAverageNutrition(currentDate);
+                    nutritionData = weeklyData;
+                    periodTitle = "Weekly Average Balance";
+                    const endDate = new Date(currentDate);
+                    const startDate = new Date(endDate);
+                    startDate.setDate(startDate.getDate() - 6);
+                    periodSubtitle = `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()} (${weeklyData.daysWithData} days with data)`;
+                }
+
+                // Update period info
+                document.getElementById('overview-period-title').textContent = periodTitle;
+                document.getElementById('overview-period-subtitle').textContent = periodSubtitle;
+
+                // Update macro circles
+                const carbsPercentage = Math.min(100, (nutritionData.carbs / targets.carbs) * 100);
+                const proteinPercentage = Math.min(100, (nutritionData.protein / targets.protein) * 100);
+                const fatPercentage = Math.min(100, (nutritionData.fat / targets.fat) * 100);
+
+                updateCircularProgress('carbs-progress', carbsPercentage);
+                updateCircularProgress('protein-progress', proteinPercentage);
+                updateCircularProgress('fat-progress', fatPercentage);
+
+                // Update text
+                document.getElementById('carbs-percentage').textContent = `${Math.round(carbsPercentage)}%`;
+                document.getElementById('carbs-amount').textContent = `${Math.round(nutritionData.carbs)}g`;
+                document.getElementById('carbs-target').textContent = `/ ${targets.carbs}g target`;
+
+                document.getElementById('protein-percentage').textContent = `${Math.round(proteinPercentage)}%`;
+                document.getElementById('protein-amount').textContent = `${Math.round(nutritionData.protein)}g`;
+                document.getElementById('protein-target').textContent = `/ ${targets.protein}g target`;
+
+                document.getElementById('fat-percentage').textContent = `${Math.round(fatPercentage)}%`;
+                document.getElementById('fat-amount').textContent = `${Math.round(nutritionData.fat)}g`;
+                document.getElementById('fat-target').textContent = `/ ${targets.fat}g target`;
+
+                // Calculate and update balance score
+                const balanceScores = calculateBalanceScore(nutritionData, targets);
+                updateBalanceCircle(balanceScores.overall);
+
+                // Update balance breakdown
+                document.getElementById('ratio-score').textContent = `${balanceScores.macroRatio}/100`;
+                document.getElementById('target-score').textContent = `${balanceScores.targetAchievement}/100`;
+                document.getElementById('variety-score').textContent = `${balanceScores.variety}/100`;
+
+                // Update balance description
+                let balanceText = "Track your meals to see your nutrition balance!";
+                if (nutritionData.calories > 0) {
+                    if (balanceScores.overall >= 80) {
+                        balanceText = "Excellent nutrition balance! Keep up the great work.";
+                    } else if (balanceScores.overall >= 60) {
+                        balanceText = "Good balance overall. Consider adding more variety to your meals.";
+                    } else if (balanceScores.overall >= 40) {
+                        balanceText = "Moderate balance. Try to meet your macro targets more consistently.";
+                    } else {
+                        balanceText = "There's room for improvement. Focus on balanced macro intake and food variety.";
+                    }
+                }
+                document.getElementById('balance-text').textContent = balanceText;
+
+                // Add animation to overview content
+                const overviewContent = document.getElementById('overview-content');
+                overviewContent.classList.remove('animate-in');
+                setTimeout(() => overviewContent.classList.add('animate-in'), 50);
+            };
+
+            // Handle view toggle
+            const handleViewToggle = (viewType) => {
+                const dailyBtn = document.getElementById('daily-view-btn');
+                const weeklyBtn = document.getElementById('weekly-view-btn');
+                
+                if (viewType === 'daily') {
+                    dailyBtn.classList.add('active');
+                    weeklyBtn.classList.remove('active');
+                } else {
+                    dailyBtn.classList.remove('active');
+                    weeklyBtn.classList.add('active');
+                }
+                
+                updateOverview();
             };
 
             // --- INITIALIZATION ---
@@ -867,6 +1442,9 @@
                 // Render today's log initially
                 renderDailyLog(today);
 
+                // Initialize overview
+                updateOverview();
+
                 // --- Add Event Listeners ---
                 ingredientForm.addEventListener('submit', handleAddIngredient);
                 addIngredientToMealBtn.addEventListener('click', addIngredientRowToMealForm);
@@ -876,6 +1454,10 @@
 
                  // Add input event listener as well for browsers that support it for date changes
                 logDateInput.addEventListener('input', handleDateChange);
+
+                // Overview event listeners
+                document.getElementById('daily-view-btn').addEventListener('click', () => handleViewToggle('daily'));
+                document.getElementById('weekly-view-btn').addEventListener('click', () => handleViewToggle('weekly'));
             };
 
             // Run the app initialization when the DOM is fully loaded
